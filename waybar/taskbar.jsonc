@@ -1,0 +1,135 @@
+{
+  "layer": "top",
+  "position": "top",
+  "height": 35,
+  "spacing": 8,
+
+  "modules-left": [
+    "hyprland/workspaces",
+    "hyprland/window"
+  ],
+
+  "modules-center": [
+    "clock",
+    "custom/mako"
+  ],
+
+  "modules-right": [
+    "cpu",
+    "memory",
+    "tray",
+    "wireplumber",
+    "backlight",
+    "battery",
+    "power-profiles-daemon"
+  ],
+
+  /* ───────────── LEFT ───────────── */
+
+  "hyprland/workspaces": {
+    "format": "{name}",
+    "on-click": "activate",
+    "all-outputs": true,
+    "persistent-workspaces": {
+      "*": 1
+    }
+  },
+
+  "hyprland/window": {
+    "format": "{}",
+    "max-length": 50,
+    "separate-outputs": true,
+    "tooltip": true,
+    "rewrite": {
+      "": ""
+    }
+  },
+
+  /* ───────────── CENTER ───────────── */
+
+  "clock": {
+    "interval": 60,
+    "format": "{:%d-%b-%Y | %H:%M}",
+    "tooltip-format": "<tt>{calendar}</tt>"
+  },
+
+  "custom/mako": {
+    "exec": "makoctl list | wc -l",
+    "format": "🔔",
+    "tooltip-format": "Notification Manager",
+    "on-click": "makoctl dismiss -a",
+    "on-click-right": "makoctl mode -a do-not-disturb && notify-send 'DND: On'",
+    "interval": 5
+  },
+
+  /* ───────────── RIGHT ───────────── */
+
+  "cpu": {
+    "interval": 2,
+    "format": " {usage}%",
+    "tooltip": true
+  },
+
+  "memory": {
+    "interval": 3,
+    "format": " {used:0.1f}G",
+    "tooltip-format": "RAM: {used:0.1f}G/ {total:0.1f}G\nSwap: {swapUsed:0.1f}G/ {swapTotal:0.1f}G"
+  },
+
+  "tray": {
+    "spacing": 3,
+    "padding": 3,
+    "icon-size": 15,
+    "show-passive-items": true
+  },
+
+  "wireplumber": {
+    "format": " {volume}%",
+    "format-muted": "󰝟 Muted",
+    "scroll-step": 5,
+    "on-click": "hyprpwcenter",
+    "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+    "tooltip": true
+  },
+
+  "backlight": {
+  "format": " {percent}%",
+  "format-icons": ["󰃞", "󰃟", "󰃠"],
+  "scroll-step": 5,
+  "min-brightness": 0.1,
+  "tooltip": true
+  },
+
+  "battery": {
+    "bat": "BAT1",
+    "interval": 5,
+    "states": {
+      "warning": 30,
+      "critical": 10
+    },
+    "events": {
+      "on-charging-100": "notify-send -t 0 -u normal 'Battery Full!!!' 'Remove your Charger!'",
+      "on-discharging-warning": "notify-send -t 0 -u low 'Battery Low!!!' 'Plug-In your Charger!'",
+		  "on-discharging-critical": "notify-send -t 0 -u critical 'Battery Critical!!!' 'Shutting Down Soon...'"
+    },
+    "format": "{icon} {capacity}%",
+    "format-charging": "󰂄 {capacity}%",
+    "format-plugged": "󰚥 {capacity}%",
+    "format-icons": ["󰂎", "󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂"],
+    "tooltip-format": "Battery: {capacity}%\nTime: {time}\nPower: {power}W\nHealth: {health}%",
+    "tooltip": true
+  },
+
+  "power-profiles-daemon": {
+    "format": "{icon} ",
+    "tooltip-format": "Power profile: {profile}\nDriver: {driver}",
+    "tooltip": true,
+    "format-icons": {
+      "default": "",
+      "performance": "",
+      "balanced": "",
+      "power-saver": ""
+    }
+  }
+
+}

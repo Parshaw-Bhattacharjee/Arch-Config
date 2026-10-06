@@ -1,0 +1,38 @@
+# General mako config
+anchor=top-right
+font=monospace 10
+border-radius=10
+border-size=2
+padding=10
+margin=10,10,10,10
+default-timeout=5000
+max-visible=5
+history=1
+layer=overlay
+
+# Colors
+background-color=#1e1e2e
+text-color=#cdd6f4
+border-color=#b4befe
+progress-color=over #313244
+
+# Normal battery notifications
+[urgency=normal]
+background-color=#94e2d5
+text-color=#000000
+border-color=#94e2d5
+default-timeout=3000
+
+# Low battery notifications
+[urgency=low]
+background-color=#fab387
+text-color=#000000
+border-color=#fab387
+default-timeout=5000
+
+# critical battery notifications
+[urgency=critical]
+background-color=#f38ba8
+text-color=#000000
+border-color=#f38ba8
+default-timeout=0
