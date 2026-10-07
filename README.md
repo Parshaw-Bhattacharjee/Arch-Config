@@ -77,7 +77,7 @@ $ nvme sanitize ${DISK} -a 2
 # Partition with gdisk
 $ gdisk ${DISK}
 # o          → create new GPT partition table
-# n          → new partition (+512MiB → ef00 for EFI, +50GiB → 8304 for root, ALL → 8302 for home)
+# n          → new partition (+1G → ef00 for EFI, +32G → 8304 for root, ALL → 8302 for home)
 # p          → print partition table
 # w          → write and exit
 ```
@@ -172,18 +172,18 @@ $ pacman -S --needed reflector networkmanager bluez bluez-utils blueman base-dev
 <p>Edit /etc/systemd/zram-generator.conf</p>
 
 ```bash
-# allocate 4G of zram
+# allocate same size as RAM of zram
 [zram0]
-zram-size = 4096
-compression-algorithm = zstd
-swap-priority = 100
+zram-size=<same size as RAM>
+compression-algorithm=zstd
+swap-priority=100
 ```
 
 <p>Edit /etc/sysctl.d/99-zram.conf</p>
 
 ```bash
-vm.swappiness = 150
-vm.page-cluster = 0
+vm.swappiness=150
+vm.page-cluster=0
 ```
 
 ### 6. Configure Initramfs
