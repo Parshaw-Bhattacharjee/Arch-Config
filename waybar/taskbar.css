@@ -74,6 +74,10 @@ tooltip label {
     color: #f9e2af;
 }
 
+#temperature {
+    color: #a6adc8;
+}
+
 #memory {
     color: #a6e3a1;
 }
@@ -119,4 +123,8 @@ tooltip label {
 
 #battery.critical {
     animation: blink 1s linear infinite alternate;
+}
+
+#temperature.critical { 
+    color: #f7768e; 
 }

@@ -24,13 +24,23 @@ local colors = require("themes.catppuccin-mocha") -- for setting colors in the c
 ------------------
 
 -- See https://wiki.hypr.land/Configuring/Basics/Monitors/
+-- Laptop panel on the left
 hl.monitor({
     output   = "eDP-1",
     mode     = "1920x1080@144.00",
     position = "0x0",
-    scale    = "1",
+    scale    = "1"
 })
 
+-- External monitor to the right of a 1920-wide laptop panel
+hl.monitor({ 
+    output = "HDMI-A-1", 
+    mode = "1920x1080@60.00", 
+    position = "1920x0", 
+    scale = 1 
+})
+
+-- Fallback for any other monitor you plug in
 hl.monitor({
     output   = "",
     mode     = "preferred",
@@ -46,7 +56,7 @@ hl.monitor({
 -- Set programs that you use
 local terminal    = "alacritty"
 local fileManager = "thunar"
-local menu        = "hyprlauncher"
+local menu        = "fuzzel"
 local browser     = "flatpak run app.zen_browser.zen"
 local editor      = "code"
 
@@ -59,13 +69,9 @@ local editor      = "code"
 
 -- Autostart necessary processes (like notifications daemons, status bars, etc.)
 -- Or execute your favorite apps at launch like this:
---
--- hl.on("hyprland.start", function () 
---   hl.exec_cmd(terminal)
---   hl.exec_cmd("nm-applet")
---   hl.exec_cmd("waybar & hyprpaper & firefox")
--- end)
+
 hl.on("hyprland.start", function () 
+  hl.exec_cmd("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP") --session environment
   hl.exec_cmd("systemctl --user start xdg-desktop-portal.service --ignore-dependencies") -- Start xdg-desktop-portal for screenshots and screen recording
   hl.exec_cmd("systemctl --user start hyprpolkitagent.service") -- Start hyprpolkitagent for polkit authentication
   hl.exec_cmd("easyeffects --gapplication-service") -- Start EasyEffects to handles EQ and mic cleanup
@@ -110,7 +116,7 @@ hl.env("QT_AUTO_SCREEN_SCALE_FACTOR", "1") -- Enable automatic scaling in Qt app
 -- })
 
 -- hl.permission("/usr/(bin|local/bin)/grim", "screencopy", "allow")
--- hl.permission("/usr/(lib|libexec|lib64)/xdg-desktop-portal-hyprland", "screencopy", "allow")
+hl.permission("/usr/(lib|libexec|lib64)/xdg-desktop-portal-hyprland", "screencopy", "allow")
 -- hl.permission("/usr/(bin|local/bin)/hyprpm", "plugin", "allow")
 
 
@@ -304,7 +310,7 @@ local closeWindowBind = hl.bind(mainMod .. " + Q", hl.dsp.window.close())
 hl.bind(mainMod .. " + L", hl.dsp.exec_cmd("command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch 'hl.dsp.exit()'"))
 hl.bind(mainMod .. " + E", hl.dsp.exec_cmd(fileManager))
 hl.bind(mainMod .. " + V", hl.dsp.exec_cmd("cursor-clip"))
-hl.bind(mainMod .. " + SPACE", hl.dsp.exec_cmd(menu))
+hl.bind(mainMod .. " + SPACE", hl.dsp.exec_cmd("pkill" .. menu .. " || " .. menu))
 hl.bind("PRINT", hl.dsp.exec_cmd("flameshot gui"))
 hl.bind(mainMod .. " + B", hl.dsp.exec_cmd(browser))
 hl.bind(mainMod .. " + C", hl.dsp.exec_cmd(editor))
@@ -358,6 +364,19 @@ hl.bind("XF86AudioPrev",  hl.dsp.exec_cmd("playerctl previous"),   { locked = tr
 -- and https://wiki.hypr.land/Configuring/Basics/Workspace-Rules/
 
 -- Example window rules that are useful
+local function pin(first, last, monitor)
+  for i = first, last do
+    hl.workspace_rule({
+      workspace = tostring(i),
+      monitor = monitor,
+      default = (i == first),   -- first workspace of each monitor is its default
+      persistent = true,        -- keep it alive even when empty
+    })
+  end
+end
+
+pin(1, 5,  "eDP-1")
+pin(6, 10, "HDMI-A-1")
 
 local suppressMaximizeRule = hl.window_rule({
     -- Ignore maximize requests from all apps. You'll probably like this.
@@ -383,26 +402,10 @@ hl.window_rule({
     no_focus = true,
 })
 
--- Layer rules also return a handle.
--- local overlayLayerRule = hl.layer_rule({
---     name  = "no-anim-overlay",
---     match = { namespace = "^my-overlay$" },
---     no_anim = true,
--- })
--- overlayLayerRule:set_enabled(false)
--- blur
-hl.layer_rule({
-  match = { namespace = "vicinae" },
-  name = "vicinae-blur",
-  blur = true,
-  ignore_alpha = 0,
-})
-
--- disable animation for vicinae only
-hl.layer_rule({
-  match = { namespace = "vicinae" },
-  name = "vicinae-no-animation",
-  no_anim = true,
+-- hide private content while sharing
+hl.layer_rule({ 
+    match = { namespace = "notifications" }, 
+    no_screen_share = true 
 })
 
 -- Hyprland-run windowrule

@@ -1,4 +1,5 @@
 {
+  "output": ["eDP-1"],
   "layer": "top",
   "position": "top",
   "height": 35,
@@ -68,6 +69,13 @@
     "interval": 2,
     "format": " {usage}%",
     "tooltip": true
+  },
+
+  "temperature": { 
+    "interval": 5,
+    "format": " {temperatureC}°C", 
+    "tooltip": true,
+    "critical-threshold": 85 
   },
 
   "memory": {

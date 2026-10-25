@@ -107,8 +107,8 @@ $ OPTS="defaults,noatime,nodiratime,compress=zstd:1,ssd,discard=async,space_cach
 
 $ mount -t btrfs -o ${OPTS},subvol=@ ${DISK}p2 /mnt
 $ mkdir -p /mnt/{boot,home,var/log,var/cache}
-mount -o ${OPTS},subvol=@log   ${DISK}p2 /mnt/var/log
-mount -o ${OPTS},subvol=@cache ${DISK}p2 /mnt/var/cache
+$ mount -o ${OPTS},subvol=@log   ${DISK}p2 /mnt/var/log
+$ mount -o ${OPTS},subvol=@cache ${DISK}p2 /mnt/var/cache
 
 $ mount -t btrfs -o ${OPTS},subvol=@home /dev/nvme0n1p3 /mnt/home
 
@@ -164,7 +164,7 @@ $ echo "EDITOR=nvim" > /etc/environment
 ### 4. Install Packages
 
 ```bash
-$ pacman -S --needed reflector networkmanager bluez bluez-utils blueman base-devel git python uv zram-generator curl alacritty fastfetch 7zip zsh awww hyprland waybar mako hyprlauncher hyprpolkitagent hyprpwcenter easyeffects qpwgraph playerctl xdg-desktop-portal xdg-desktop-portal-hyprland brightnessctl greetd greetd-tuigreet thunar thunar-volman gvfs tumbler thunar-archive-plugin file-roller btrfs-assistant noto-fonts noto-fonts-emoji ttf-jetbrains-mono-nerd power-profiles-daemon upower btop
+$ pacman -S --needed reflector networkmanager network-manager-applet bluez bluez-utils blueman base-devel git python uv zram-generator curl alacritty fastfetch 7zip zsh awww hyprland fuzzel papirus-icon-theme waybar mako hyprlauncher hyprpolkitagent hyprpwcenter easyeffects qpwgraph playerctl xdg-desktop-portal xdg-desktop-portal-hyprland brightnessctl greetd greetd-tuigreet thunar thunar-volman gvfs tumbler thunar-archive-plugin file-roller btrfs-assistant noto-fonts noto-fonts-emoji noto-fonts-extra power-profiles-daemon upower btop
 ```
 
 ### 5. Configure zram
@@ -230,16 +230,6 @@ initrd  /initramfs-linux.img
 options root=UUID=<ROOT-UUID> rootflags=subvol=@ rw quiet nvidia_drm.modeset=1
 ```
 
-<p>Edit /boot/loader/entries/arch-fallback.conf</p>
-
-```bash
-title   Arch Linux (fallback)
-linux   /vmlinuz-linux
-initrd  /intel-ucode.img
-initrd  /initramfs-linux-fallback.img
-options root=UUID=<ROOT-UUID> rootflags=subvol=@ rw
-```
-
 <p>Edit /etc/greetd/config.toml</p>
 
 ```bash
@@ -248,14 +238,51 @@ options root=UUID=<ROOT-UUID> rootflags=subvol=@ rw
 vt = 1
 
 [default_session]
-# Enables numlock on tty1, then starts tuigreet which launches Hyprland.
+# starts tuigreet which launches Hyprland.
 # --remember pre-fills the last username ('user'), so you only type the password.
-command = "sh -c 'setleds -D +num < /dev/tty1; tuigreet --time --remember --remember-session --asterisks --cmd Hyprland'"
+command = "tuigreet --time --asterisks --remember --remember-session --cmd start-hyprland"
 user = "greeter"
 ```
 
 ```bash
 $ mkdir -p /var/cache/tuigreet && chown greeter:greeter /var/cache/tuigreet
+```
+
+<p>~/.config/fuzzel/fuzzel.ini</p>
+
+```bash
+[main]
+font=JetBrainsMono Nerd Font:size=12
+terminal=alacritty -e
+prompt="> "
+icons-enabled=yes
+icon-theme=Papirus-Dark
+width=40
+lines=10
+horizontal-pad=20
+vertical-pad=12
+inner-pad=8
+layer=overlay
+anchor=center
+exit-on-keyboard-focus-loss=yes
+
+[colors]
+background=14141cee
+text=e6e6f0ff
+prompt=7aa2f7ff
+input=e6e6f0ff
+match=7aa2f7ff
+selection=3b4261ff
+selection-text=ffffffff
+selection-match=7aa2f7ff
+border=3b4261ff
+
+[border]
+width=2
+radius=10
+
+[dmenu]
+exit-immediately-if-empty=no
 ```
 
 ### 9. Enable Services
@@ -297,11 +324,11 @@ $ makepkg -si
 $ cd .. && rm -rf paru
 
 # install flatpak
-sudo pacman -S flatpak
+$ sudo pacman -S flatpak
 
 # install snap store
-paru snapd
-sudo systemctl enable --now snapd.socket
+$ paru snapd
+$ sudo systemctl enable --now snapd.socket
 ```
 
 ### 3. Install useful Packages
