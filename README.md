@@ -68,7 +68,7 @@ $ timedatectl set-ntp true
 $ lsblk
 
 # find the drive for installation
-$ $ DISK="/dev/nvme0n1"
+$ DISK="/dev/nvme0n1"
 
 # Wipe the NVMe drive
 $ nvme format --force ${DISK} -s 1 -n 0xffffffff
@@ -248,43 +248,6 @@ user = "greeter"
 $ mkdir -p /var/cache/tuigreet && chown greeter:greeter /var/cache/tuigreet
 ```
 
-<p>~/.config/fuzzel/fuzzel.ini</p>
-
-```bash
-[main]
-font=JetBrainsMono Nerd Font:size=12
-terminal=alacritty -e
-prompt="> "
-icons-enabled=yes
-icon-theme=Papirus-Dark
-width=40
-lines=10
-horizontal-pad=20
-vertical-pad=12
-inner-pad=8
-layer=overlay
-anchor=center
-exit-on-keyboard-focus-loss=yes
-
-[colors]
-background=14141cee
-text=e6e6f0ff
-prompt=7aa2f7ff
-input=e6e6f0ff
-match=7aa2f7ff
-selection=3b4261ff
-selection-text=ffffffff
-selection-match=7aa2f7ff
-border=3b4261ff
-
-[border]
-width=2
-radius=10
-
-[dmenu]
-exit-immediately-if-empty=no
-```
-
 ### 9. Enable Services
 
 ```bash
@@ -329,6 +292,8 @@ $ sudo pacman -S flatpak
 # install snap store
 $ paru snapd
 $ sudo systemctl enable --now snapd.socket
+$ sudo systemctl enable --now snapd.apparmor.service
+$ sudo ln -s /var/lib/snapd/snap /snap
 ```
 
 ### 3. Install useful Packages
@@ -366,6 +331,8 @@ $ git clone https://github.com/Parshaw-Bhattacharjee/arch-conf.git
 > mako: ~/.config/
 
 > waybar: ~/.config/
+
+> fuzzel: ~/.config/
 
 > zsh: ~/
 <p>Note: Always paste the files inside the zsh folder.</p>
