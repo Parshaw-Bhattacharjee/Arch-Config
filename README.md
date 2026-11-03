@@ -262,7 +262,6 @@ $ reboot
 ```
 
 ---
-
 ## Post-Installation & Configuration
 
 ### 1. Connect to network
@@ -336,6 +335,6 @@ $ git clone https://github.com/Parshaw-Bhattacharjee/arch-conf.git
 
 > zsh: ~/
 <p>Note: Always paste the files inside the zsh folder.</p>
----
 
-<p align="center">Kindly modify the commands & configuration as per your use-case.</p># Arch-Config
+---
+<p align="center">Kindly modify the commands & configuration as per your use-case.</p>
